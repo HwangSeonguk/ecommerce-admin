@@ -1,11 +1,11 @@
 package com.myproject.ecommerceadmin.domain.user;
 
-import com.myproject.ecommerceadmin.dto.AdminUserDTO;
 import com.myproject.ecommerceadmin.enums.AdminUserPermission;
 import com.myproject.ecommerceadmin.enums.AdminUserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdminUser {
+public class AdminUser implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class AdminUser {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "password")
     private String password;

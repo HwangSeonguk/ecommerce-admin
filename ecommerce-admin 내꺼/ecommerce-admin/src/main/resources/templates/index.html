@@ -29,7 +29,16 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
         </div>
+        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${username}">0</div>
+        <div>
+            <button type="button" class="btn btn-logout" onclick="location.href = '/user/logout'">로그아웃</button>
+            <button type="button" class="btn btn-delete" onclick="location.href = '/user/delete'">회원탈퇴</button>
+        </div>
+        <div>
+            <button type="button" class="btn btn-registration" onclick="location.href = '/product/registration'">상품 등록</button>
+            <button type="button" class="btn btn-list" onclick="location.href = '/product/list'">상품 목록</button>
 
+        </div>
         <!-- Content Row -->
         <div class="row">
 

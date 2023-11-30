@@ -1,43 +1,45 @@
 package com.myproject.ecommerceadmin.controller;
 
+import com.myproject.ecommerceadmin.annotation.AuthUser;
 import com.myproject.ecommerceadmin.domain.user.AdminUser;
-import com.myproject.ecommerceadmin.dto.AdminUserDTO;
+import com.myproject.ecommerceadmin.dto.user.AdminUserFormDTO;
 import com.myproject.ecommerceadmin.service.AdminUserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Slf4j
 @Controller
-
+@RequiredArgsConstructor
 public class AdminUserController {
     private final AdminUserService adminUserService;
 
-    public AdminUserController(AdminUserService adminUserService) {
-        this.adminUserService = adminUserService;
-    }
-
-    @GetMapping(value = "/users/sign-up")
+    @GetMapping(value = "/user/signup")
     public String adminUserForm(Model model){
         log.info(">>> 회원 가입 폼");
-        return "users/sign-up";
+        return "/user/signup";
     }
-    @PostMapping(value = "/users/register")
-    public String createAdminUser(AdminUserDTO adminUserDTO){
-        log.info(">>> 회원 가입 진행, {}", adminUserDTO);
-        AdminUser adminUser = adminUserDTO.toEntity();
-        adminUserService.save(adminUser);
-        return "/";
+    @PostMapping(value = "/user/sign-up")
+    public String createAdminUser(AdminUserFormDTO adminUserFormDTO){
+        log.info(">>> 회원 가입 진행, {}", adminUserFormDTO);
+        log.info(">>> 회원 가입 결과, {}", adminUserService.insert(adminUserFormDTO.toDTO().toEntity()));
+
+        return "redirect:/user/login";
     }
-    @GetMapping(value = "/users/login")
-    public String loginForm(@RequestParam(value = "error", defaultValue = "false") boolean error, Model model) {
-        if (error) {
-            model.addAttribute("loginFailure", true);
-            model.addAttribute("loginFailureMessage", "아이디와 패스워드를 확인하시고 다시 로그인해주세요.");
-        }
-        return "/users/login";
+
+    @GetMapping(value = "/user/delete")
+    public String deleteAdminUser(@AuthUser AdminUser adminUser) {
+        log.info(">>> 회원 탈퇴 진행, {}", adminUser);
+        adminUserService.delete(adminUser);
+        SecurityContextHolder.clearContext();
+
+        return "/user/login";
     }
+
+
 }

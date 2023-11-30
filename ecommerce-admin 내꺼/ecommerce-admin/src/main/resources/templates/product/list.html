@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default-layout}"
+>
+<!-- 컨텐츠 영역 -->
+<div layout:fragment="content">
+    <div class="container-md text-center">
+        <!-- Content Area -->
+        <div class="row" th:each="productDTO : ${productDTOList}">
+            <div class="d-flex justify-content-center">
+                <a th:href="@{/product/one/productId=}+${productDTO.getId()}">
+                    <img th:src="${productDTO.getThumbnailUrl()}" class="product-image">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title text-start" th:text="${productDTO.getName()}"></h5>
+                    <h5 class="card-title text-start" th:text="|상품가격: ${#numbers.formatInteger(productDTO.getPrice(), 3, 'COMMA')}원|"></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
